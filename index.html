@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../angular.js"></script>
+  <script type="text/javascript">
+
+  var app = angular.module("myapp", []);
+
+    app.controller('testes', ['$scope', 'filterFilter', function ObjectArrayCtrl($scope, filterFilter) {
+
+  // Fruits
+  $scope.fruits = [
+    { name: 'apple',    selected: true },
+    { name: 'orange',   selected: false },
+    { name: 'pear',     selected: true },
+    { name: 'naartjie', selected: false }
+  ];
+
+  // Selected fruits
+  $scope.selection = [];
+
+  // Helper method to get selected fruits
+  $scope.selectedFruits = function selectedFruits() {
+    return filterFilter($scope.fruits, { selected: true });
+  };
+
+  // Watch fruits for changes
+  $scope.$watch('fruits|filter:{selected:true}', function (nv) {
+    $scope.selection = nv.map(function (fruit) {
+      return fruit.name;
+    });
+  }, true);
+}]);
+
+  </script>
+
+  <style>
+    label
+    {
+      width: 250px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    input
+    {
+      vertical-align: middle;
+    }
+
+    .valueItems
+    {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body ng-app="myapp">
+
+  <div ng-controller="testes">
+
+<label ng-repeat="fruit in fruits">
+  <!--
+    - Use `value="{{fruit.name}}"` to give the input a real value, in case the form gets submitted
+      traditionally
+
+    - Use `ng-checked="fruit.selected"` to have the checkbox checked based on some angular expression
+      (no two-way-data-binding)
+
+    - Use `ng-model="fruit.selected"` to utilize two-way-data-binding. Note that `.selected`
+      is arbitrary. The property name could be anything and will be created on the object if not present.
+  -->
+  <input
+    type="checkbox"
+    name="selectedFruits[]"
+    value="{{fruit.name}}"
+    ng-model="fruit.selected"
+  > {{fruit.name}}
+</label>
+
+    <br />
+    {{ fruits }}
+
+  </div>
+</body>
+</html>
